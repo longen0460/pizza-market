@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>🍕 Наше меню</h2>
+<p style="margin-bottom: 20px; color: #666;">Выберите свою любимую пиццу</p>
+
+<div class="menu-grid">
+    {% for pizza in pizzas %}
+    <div class="pizza-card">
+        {% if pizza.image %}
+            <img src="{{ pizza.image.url }}" alt="{{ pizza.name }}">
+        {% else %}
+            <img src="https://via.placeholder.com/300x200?text=Пицца" alt="{{ pizza.name }}">
+        {% endif %}
+        <div class="pizza-info">
+            <h3>{{ pizza.name }}</h3>
+            <p style="color: #666; margin: 10px 0;">{{ pizza.description }}</p>
+            <div class="price">{{ pizza.price }} ₽</div>
+            <form method="post" action="/cart/add/{{ pizza.id }}/">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" style="width: 100%;">🛒 Добавить в корзину</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p style="text-align: center; font-size: 18px;">Пиццы пока нет. Зайдите в админку и добавьте пиццы!</p>
+    {% endfor %}
+</div>
+{% endblock %}

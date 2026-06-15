@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📦 Статус заказа #{{ order.id }}</h2>
+
+<div style="background: white; padding: 30px; border-radius: 15px; margin-top: 20px;">
+    <div style="margin-bottom: 30px;">
+        <p><strong>Дата заказа:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+        <p><strong>Имя:</strong> {{ order.name }}</p>
+        <p><strong>Телефон:</strong> {{ order.phone }}</p>
+        <p><strong>Адрес:</strong> {{ order.address }}</p>
+        <p><strong>Общая сумма:</strong> <span style="font-size: 24px; color: #ff6b35;">{{ order.total_price }} ₽</span></p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <h3>Текущий статус:</h3>
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 10px;">
+            {% if order.status == 'pending' %}
+                <p style="color: #ffc107; font-size: 24px;">⏳ Ожидает подтверждения</p>
+                <p>Ваш заказ принят, скоро его начнут готовить!</p>
+            {% elif order.status == 'cooking' %}
+                <p style="color: #17a2b8; font-size: 24px;">🍳 Готовится</p>
+                <p>Повара уже готовят вашу пиццу!</p>
+            {% elif order.status == 'delivery' %}
+                <p style="color: #007bff; font-size: 24px;">🛵 В доставке</p>
+                <p>Курьер уже везет вашу пиццу!</p>
+            {% elif order.status == 'completed' %}
+                <p style="color: #28a745; font-size: 24px;">✅ Доставлен</p>
+                <p>Ваш заказ доставлен! Приятного аппетита!</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="/" class="btn btn-primary">🍕 Заказать еще</a>
+        <a href="/users/profile/" class="btn" style="background: #6c757d; color: white;">📋 Мои заказы</a>
+    </div>
+</div>
+{% endblock %}

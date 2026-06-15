@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>👤 Личный кабинет</h2>
+
+<div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+    <h3>Информация о пользователе</h3>
+    <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
+    <p><strong>Телефон:</strong> {{ user.phone|default:"Не указан" }}</p>
+</div>
+
+<h3>📋 История заказов</h3>
+
+{% if orders %}
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        {% for order in orders %}
+        <div style="background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #ff6b35;">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                <div>
+                    <strong>Заказ #{{ order.id }}</strong>
+                    <p style="margin: 5px 0;">{{ order.created_at|date:"d.m.Y H:i" }}</p>
+                    <p>Сумма: <strong>{{ order.total_price }} ₽</strong></p>
+                </div>
+                <div style="text-align: right;">
+                    {% if order.status == 'pending' %}
+                        <span style="background: #ffc107; padding: 5px 10px; border-radius: 5px;">⏳ Ожидает</span>
+                    {% elif order.status == 'cooking' %}
+                        <span style="background: #17a2b8; padding: 5px 10px; border-radius: 5px; color: white;">🍳 Готовится</span>
+                    {% elif order.status == 'delivery' %}
+                        <span style="background: #007bff; padding: 5px 10px; border-radius: 5px; color: white;">🛵 Доставка</span>
+                    {% elif order.status == 'completed' %}
+                        <span style="background: #28a745; padding: 5px 10px; border-radius: 5px; color: white;">✅ Доставлен</span>
+                    {% endif %}
+                    <p style="margin-top: 10px;">
+                        <a href="/orders/status/{{ order.id }}/" style="color: #ff6b35;">Подробнее →</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div style="background: white; padding: 50px; text-align: center; border-radius: 10px;">
+        <p style="font-size: 18px;">У вас пока нет заказов</p>
+        <a href="/" class="btn btn-primary" style="margin-top: 20px;">Сделать первый заказ</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px;">
+    <h2>📝 Регистрация</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <small style="color: red;">{{ field.errors.0 }}</small>
+            {% endif %}
+            {% if field.help_text %}
+                <small style="color: #666; display: block;">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+    </form>
+    
+    <p style="margin-top: 20px; text-align: center;">
+        Уже есть аккаунт? <a href="/users/login/">Войдите</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📝 Оформление заказа</h2>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div>
+        <h3>Ваш заказ:</h3>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Пицца</th>
+                    <th>Кол-во</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.pizza.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{% widthratio item.pizza.price 1 item.quantity %} ₽</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" style="text-align: right;"><strong>Итого:</strong></td>
+                    <td><strong style="color: #ff6b35;">{{ total }} ₽</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    <div>
+        <h3>Данные для доставки:</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Имя *</label>
+                <input type="text" id="name" name="name" required value="{{ user.username }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Телефон *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+7 (XXX) XXX-XX-XX">
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Адрес доставки *</label>
+                <textarea id="address" name="address" rows="3" required placeholder="Улица, дом, квартира"></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-success" style="width: 100%;">✅ Подтвердить заказ</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
