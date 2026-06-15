@@ -4,8 +4,8 @@ Django settings for pizzeria project.
 
 from pathlib import Path
 import os
-import dj_database_url
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -61,18 +61,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pizzeria.wsgi.application'
 
-# Database
+# Database - SQLite (работает на Render бесплатно)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
-# Используем PostgreSQL на Render, если есть DATABASE_URL
-database_url = os.environ.get('DATABASE_URL')
-if database_url:
-    DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -101,15 +96,18 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# Media files
+# Media files (загруженные картинки - для локальной разработки)
+# На Render картинки не сохранятся, нужно будет настроить Cloudinary
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Custom user model
 AUTH_USER_MODEL = 'users.User'
 
+# Login/Logout redirects
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'menu'
 LOGOUT_REDIRECT_URL = 'menu'
