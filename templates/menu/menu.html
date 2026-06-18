@@ -1,29 +1,183 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h2>🍕 Наше меню</h2>
-<p style="margin-bottom: 20px; color: #666;">Выберите свою любимую пиццу</p>
+<div class="menu-hero">
+    <h1>🍕 Добро пожаловать в пиццерию!</h1>
+    <p>Вкусная еда с доставкой на дом</p>
+</div>
 
-<div class="menu-grid">
-    {% for pizza in pizzas %}
-    <div class="pizza-card">
-        {% if pizza.image %}
-            <img src="{{ pizza.image.url }}" alt="{{ pizza.name }}">
-        {% else %}
-            <img src="https://via.placeholder.com/300x200?text=Пицца" alt="{{ pizza.name }}">
-        {% endif %}
-        <div class="pizza-info">
-            <h3>{{ pizza.name }}</h3>
-            <p style="color: #666; margin: 10px 0;">{{ pizza.description }}</p>
-            <div class="price">{{ pizza.price }} ₽</div>
-            <form method="post" action="/cart/add/{{ pizza.id }}/">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary" style="width: 100%;">🛒 Добавить в корзину</button>
-            </form>
+<!-- ПОИСК -->
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="🔍 Поиск по меню..." onkeyup="searchProducts()">
+</div>
+
+<div class="menu-container">
+    {% for category in categories %}
+        <div class="category-section">
+            <div class="category-header">
+                <h2>{{ category.name }}</h2>
+            </div>
+            
+            <!-- ПИЦЦЫ -->
+            {% if category.pizzas.all %}
+                <h3 class="subcategory-title">🍕 Пиццы</h3>
+                <div class="product-grid" data-category="pizza">
+                    {% for item in category.pizzas.all %}
+                        {% if item.is_available %}
+                            <div class="product-card" data-name="{{ item.name|lower }}">
+                                <div class="product-image">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                    {% else %}
+                                        <img src="https://via.placeholder.com/300x200/ff6b35/ffffff?text={{ item.name }}">
+                                    {% endif %}
+                                </div>
+                                <div class="product-info">
+                                    <h3>{{ item.name }}</h3>
+                                    <p>{{ item.description|truncatechars:50 }}</p>
+                                    <div class="product-price">{{ item.price }} ₽</div>
+                                    <form method="post" action="/cart/add/pizza/{{ item.id }}/">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">🛒 В корзину</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- НАПИТКИ -->
+            {% if category.drinks.all %}
+                <h3 class="subcategory-title">🥤 Напитки</h3>
+                <div class="product-grid" data-category="drink">
+                    {% for item in category.drinks.all %}
+                        {% if item.is_available %}
+                            <div class="product-card" data-name="{{ item.name|lower }}">
+                                <div class="product-image">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                    {% else %}
+                                        <img src="https://via.placeholder.com/300x200/3498db/ffffff?text={{ item.name }}">
+                                    {% endif %}
+                                </div>
+                                <div class="product-info">
+                                    <h3>{{ item.name }}</h3>
+                                    <span class="product-volume">📦 {{ item.get_volume_display }}</span>
+                                    <p>{{ item.description|truncatechars:50 }}</p>
+                                    <div class="product-price">{{ item.price }} ₽</div>
+                                    <form method="post" action="/cart/add/drink/{{ item.id }}/">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">🛒 В корзину</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- ЗАКУСКИ -->
+            {% if category.snacks.all %}
+                <h3 class="subcategory-title">🍗 Закуски</h3>
+                <div class="product-grid" data-category="snack">
+                    {% for item in category.snacks.all %}
+                        {% if item.is_available %}
+                            <div class="product-card" data-name="{{ item.name|lower }}">
+                                <div class="product-image">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                    {% else %}
+                                        <img src="https://via.placeholder.com/300x200/e67e22/ffffff?text={{ item.name }}">
+                                    {% endif %}
+                                </div>
+                                <div class="product-info">
+                                    <h3>{{ item.name }}</h3>
+                                    <p>{{ item.description|truncatechars:50 }}</p>
+                                    <div class="product-price">{{ item.price }} ₽</div>
+                                    <form method="post" action="/cart/add/snack/{{ item.id }}/">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">🛒 В корзину</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- ГАРНИРЫ -->
+            {% if category.side_dishes.all %}
+                <h3 class="subcategory-title">🍟 Гарниры</h3>
+                <div class="product-grid" data-category="side">
+                    {% for item in category.side_dishes.all %}
+                        {% if item.is_available %}
+                            <div class="product-card" data-name="{{ item.name|lower }}">
+                                <div class="product-image">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                    {% else %}
+                                        <img src="https://via.placeholder.com/300x200/f39c12/ffffff?text={{ item.name }}">
+                                    {% endif %}
+                                </div>
+                                <div class="product-info">
+                                    <h3>{{ item.name }}</h3>
+                                    <p>{{ item.description|truncatechars:50 }}</p>
+                                    <div class="product-price">{{ item.price }} ₽</div>
+                                    <form method="post" action="/cart/add/side/{{ item.id }}/">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">🛒 В корзину</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
         </div>
-    </div>
     {% empty %}
-    <p style="text-align: center; font-size: 18px;">Пиццы пока нет. Зайдите в админку и добавьте пиццы!</p>
+        <p style="text-align: center; font-size: 18px;">Категории пока не добавлены. Зайдите в админку и добавьте категории!</p>
     {% endfor %}
 </div>
+
+<script>
+function searchProducts() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.getElementsByClassName('product-card');
+    
+    for (let card of cards) {
+        let name = card.getAttribute('data-name') || '';
+        if (name.includes(input) || input === '') {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    }
+}
+</script>
+
+<style>
+.search-container {
+    margin: 20px 0 30px 0;
+    text-align: center;
+}
+
+#searchInput {
+    width: 100%;
+    max-width: 500px;
+    padding: 14px 20px;
+    border: 2px solid #e74c3c;
+    border-radius: 30px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+#searchInput:focus {
+    border-color: #c0392b;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.2);
+}
+</style>
 {% endblock %}

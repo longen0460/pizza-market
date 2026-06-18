@@ -3,13 +3,13 @@
 {% block content %}
 <h2>📦 Статус заказа #{{ order.id }}</h2>
 
-<div style="background: white; padding: 30px; border-radius: 15px; margin-top: 20px;">
+<div style="background: white; padding: 30px; border-radius: 15px; margin-top: 20px; box-shadow: 0 3px 12px rgba(0,0,0,0.08);">
     <div style="margin-bottom: 30px;">
         <p><strong>Дата заказа:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
         <p><strong>Имя:</strong> {{ order.name }}</p>
         <p><strong>Телефон:</strong> {{ order.phone }}</p>
         <p><strong>Адрес:</strong> {{ order.address }}</p>
-        <p><strong>Общая сумма:</strong> <span style="font-size: 24px; color: #ff6b35;">{{ order.total_price }} ₽</span></p>
+        <p><strong>Общая сумма:</strong> <span style="font-size: 24px; color: #e74c3c; font-weight: bold;">{{ order.total_price }} ₽</span></p>
     </div>
     
     <div style="margin: 30px 0;">
@@ -20,10 +20,10 @@
                 <p>Ваш заказ принят, скоро его начнут готовить!</p>
             {% elif order.status == 'cooking' %}
                 <p style="color: #17a2b8; font-size: 24px;">🍳 Готовится</p>
-                <p>Повара уже готовят вашу пиццу!</p>
+                <p>Повара уже готовят ваш заказ!</p>
             {% elif order.status == 'delivery' %}
                 <p style="color: #007bff; font-size: 24px;">🛵 В доставке</p>
-                <p>Курьер уже везет вашу пиццу!</p>
+                <p>Курьер уже везет ваш заказ!</p>
             {% elif order.status == 'completed' %}
                 <p style="color: #28a745; font-size: 24px;">✅ Доставлен</p>
                 <p>Ваш заказ доставлен! Приятного аппетита!</p>
@@ -31,9 +31,9 @@
         </div>
     </div>
     
-    <div style="text-align: center;">
-        <a href="/" class="btn btn-primary">🍕 Заказать еще</a>
-        <a href="/users/profile/" class="btn" style="background: #6c757d; color: white;">📋 Мои заказы</a>
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="/" class="btn btn-primary" style="display: inline-block; width: auto; padding: 12px 40px; text-decoration: none; border-radius: 8px; background: #e74c3c; color: white; font-weight: 600; transition: all 0.3s;">🍕 Заказать еще</a>
+        <a href="/users/profile/" class="btn btn-secondary" style="display: inline-block; width: auto; padding: 12px 40px; text-decoration: none; border-radius: 8px; background: #6c757d; color: white; font-weight: 600; transition: all 0.3s; margin-left: 10px;">📋 Мои заказы</a>
     </div>
 </div>
 {% endblock %}

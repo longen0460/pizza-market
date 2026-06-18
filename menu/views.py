@@ -1,8 +1,15 @@
 from django.shortcuts import render
-from .models import Pizza
+from .models import Category, Pizza, Drink, Snack, SideDish
 
 def menu_view(request):
-    # Получаем все доступные пиццы из БД
-    pizzas = Pizza.objects.filter(is_available=True)
-    # Передаем их в шаблон
-    return render(request, 'menu/menu.html', {'pizzas': pizzas})
+    categories = Category.objects.filter(is_active=True).prefetch_related(
+        'pizzas',
+        'drinks',
+        'snacks',
+        'side_dishes'
+    )
+    
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'menu/menu.html', context)

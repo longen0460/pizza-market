@@ -3,37 +3,38 @@
 {% block content %}
 <h2>👤 Личный кабинет</h2>
 
-<div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-    <h3>Информация о пользователе</h3>
+<div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 3px 12px rgba(0,0,0,0.08);">
+    <h3 style="margin-bottom: 15px; color: #2c3e50;">Информация о пользователе</h3>
     <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
     <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
     <p><strong>Телефон:</strong> {{ user.phone|default:"Не указан" }}</p>
+    <p><strong>Адрес:</strong> {{ user.address|default:"Не указан" }}</p>
 </div>
 
-<h3>📋 История заказов</h3>
+<h3 style="margin-bottom: 20px;">📋 История заказов</h3>
 
 {% if orders %}
     <div style="display: flex; flex-direction: column; gap: 20px;">
         {% for order in orders %}
-        <div style="background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #ff6b35;">
+        <div style="background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #e74c3c; box-shadow: 0 3px 12px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
                 <div>
                     <strong>Заказ #{{ order.id }}</strong>
-                    <p style="margin: 5px 0;">{{ order.created_at|date:"d.m.Y H:i" }}</p>
-                    <p>Сумма: <strong>{{ order.total_price }} ₽</strong></p>
+                    <p style="margin: 5px 0; color: #7f8c8d;">{{ order.created_at|date:"d.m.Y H:i" }}</p>
+                    <p>Сумма: <strong style="color: #e74c3c;">{{ order.total_price }} ₽</strong></p>
                 </div>
                 <div style="text-align: right;">
                     {% if order.status == 'pending' %}
-                        <span style="background: #ffc107; padding: 5px 10px; border-radius: 5px;">⏳ Ожидает</span>
+                        <span style="background: #ffc107; padding: 5px 10px; border-radius: 5px; display: inline-block;">⏳ Ожидает</span>
                     {% elif order.status == 'cooking' %}
-                        <span style="background: #17a2b8; padding: 5px 10px; border-radius: 5px; color: white;">🍳 Готовится</span>
+                        <span style="background: #17a2b8; padding: 5px 10px; border-radius: 5px; color: white; display: inline-block;">🍳 Готовится</span>
                     {% elif order.status == 'delivery' %}
-                        <span style="background: #007bff; padding: 5px 10px; border-radius: 5px; color: white;">🛵 Доставка</span>
+                        <span style="background: #007bff; padding: 5px 10px; border-radius: 5px; color: white; display: inline-block;">🛵 Доставка</span>
                     {% elif order.status == 'completed' %}
-                        <span style="background: #28a745; padding: 5px 10px; border-radius: 5px; color: white;">✅ Доставлен</span>
+                        <span style="background: #28a745; padding: 5px 10px; border-radius: 5px; color: white; display: inline-block;">✅ Доставлен</span>
                     {% endif %}
                     <p style="margin-top: 10px;">
-                        <a href="/orders/status/{{ order.id }}/" style="color: #ff6b35;">Подробнее →</a>
+                        <a href="/orders/status/{{ order.id }}/" style="color: #e74c3c; text-decoration: none;">Подробнее →</a>
                     </p>
                 </div>
             </div>
@@ -41,9 +42,10 @@
         {% endfor %}
     </div>
 {% else %}
-    <div style="background: white; padding: 50px; text-align: center; border-radius: 10px;">
-        <p style="font-size: 18px;">У вас пока нет заказов</p>
-        <a href="/" class="btn btn-primary" style="margin-top: 20px;">Сделать первый заказ</a>
+    <div style="text-align: center; padding: 50px 20px; background: white; border-radius: 20px; box-shadow: 0 3px 12px rgba(0,0,0,0.08);">
+        <p style="font-size: 2rem; margin-bottom: 10px;">📭</p>
+        <p style="font-size: 1.2rem; color: #7f8c8d; margin-bottom: 20px;">У вас пока нет заказов</p>
+        <a href="/" class="btn btn-primary" style="display: inline-block; width: auto; padding: 12px 40px; text-decoration: none; border-radius: 8px; background: #e74c3c; color: white; font-weight: 600; transition: all 0.3s;">🍕 Сделать первый заказ</a>
     </div>
 {% endif %}
 {% endblock %}

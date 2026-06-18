@@ -5,12 +5,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('menu.urls')),        # Главная страница (меню)
-    path('cart/', include('cart.urls')),   # Все URL для корзины
-    path('orders/', include('orders.urls')), # Все URL для заказов
-    path('users/', include('users.urls')),   # Все URL для пользователей
+    path('', include('menu.urls')),
+    path('cart/', include('cart.urls')),
+    path('orders/', include('orders.urls')),
+    path('users/', include('users.urls')),
 ]
 
-# ЭТО ВАЖНО: Добавляем поддержку загрузки картинок
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

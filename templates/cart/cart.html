@@ -7,7 +7,7 @@
 <table class="cart-table">
     <thead>
         <tr>
-            <th>Пицца</th>
+            <th>Товар</th>
             <th>Цена</th>
             <th>Количество</th>
             <th>Сумма</th>
@@ -16,30 +16,31 @@
     <tbody>
         {% for item in items %}
         <tr>
-            <td>{{ item.pizza.name }}</td>
-            <td>{{ item.pizza.price }} ₽</td>
+            <td>{{ item.content_object.name }}</td>
+            <td>{{ item.content_object.price }} ₽</td>
             <td>{{ item.quantity }}</td>
-            <td>{% widthratio item.pizza.price 1 item.quantity %} ₽</td>
+            <td>{% widthratio item.content_object.price 1 item.quantity %} ₽</td>
         </tr>
         {% endfor %}
     </tbody>
     <tfoot>
-        <tr style="background: #f8f9fa;">
-            <td colspan="3" style="text-align: right; font-weight: bold;">Итого:</td>
-            <td style="font-weight: bold; color: #ff6b35; font-size: 20px;">{{ total }} ₽</td>
+        <tr>
+            <td colspan="3" style="text-align: right; font-size: 1.1rem;">Итого:</td>
+            <td style="font-size: 1.5rem; color: #e74c3c; font-weight: bold;">{{ total }} ₽</td>
         </tr>
     </tfoot>
 </table>
 
-<div style="margin-top: 30px; text-align: right;">
-    <a href="/" class="btn" style="background: #6c757d; color: white; margin-right: 10px;">🍕 Продолжить покупки</a>
+<div class="cart-actions">
+    <a href="/" class="btn btn-secondary">🍕 Продолжить покупки</a>
     <a href="/orders/checkout/" class="btn btn-success">✅ Оформить заказ</a>
 </div>
 
 {% else %}
-<div style="text-align: center; padding: 50px; background: white; border-radius: 10px;">
-    <p style="font-size: 20px; margin-bottom: 20px;">🛒 Ваша корзина пуста</p>
-    <a href="/" class="btn btn-primary">🍕 Перейти в меню</a>
+<div class="empty-cart">
+    <p style="font-size: 2rem; margin-bottom: 10px;">🛒</p>
+    <p style="font-size: 1.2rem; color: #7f8c8d; margin-bottom: 20px;">Ваша корзина пуста</p>
+    <a href="/" class="btn btn-primary" style="display: inline-block; width: auto; padding: 12px 40px;">🍕 Перейти в меню</a>
 </div>
 {% endif %}
 {% endblock %}

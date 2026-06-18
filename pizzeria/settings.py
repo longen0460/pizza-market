@@ -4,15 +4,16 @@ Django settings for pizzeria project.
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-8x@3^&*()_+!@#$%^&*()_+')
+SECRET_KEY = 'django-insecure-1234567890!@#$%^&*()_+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -61,7 +62,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pizzeria.wsgi.application'
 
-# Database - SQLite (работает на Render бесплатно)
+# Database - SQLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -96,8 +97,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# Media files (загруженные картинки - для локальной разработки)
-# На Render картинки не сохранятся, нужно будет настроить Cloudinary
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -111,3 +111,25 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'menu'
 LOGOUT_REDIRECT_URL = 'menu'
+
+# ============ CSRF НАСТРОЙКИ ============
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
+
+# ============ ДОПОЛНИТЕЛЬНО ДЛЯ АДМИНКИ ============
+# Чтобы админка работала без проблем
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# ============ ДЛЯ RENDER ============
+# Если есть DATABASE_URL от Render, используем PostgreSQL
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600
+    )
+
+# Для WhiteNoise (раздача статики на Render)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
